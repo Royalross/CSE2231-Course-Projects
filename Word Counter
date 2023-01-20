@@ -15,7 +15,7 @@ import components.simplewriter.SimpleWriter1L;
 /**
  * Put a short phrase describing the program here.
  *
- * @author Lughan Ross
+ * @author 
  *
  */
 public final class WordCount {
