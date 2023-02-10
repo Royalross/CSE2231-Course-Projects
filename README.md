@@ -1,2 +1,2 @@
-# CSE2231-Academic-projects-
+# CSE2231-projects-
 These are the academic projects that was created by me while take software 2 (CSE 2231) at The Ohio State University 
