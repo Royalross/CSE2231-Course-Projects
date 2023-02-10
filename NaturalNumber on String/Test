@@ -1,0 +1,343 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import components.naturalnumber.NaturalNumber;
+import components.naturalnumber.NaturalNumber1L;
+
+/**
+ * JUnit test fixture for {@code NaturalNumber}'s constructors and kernel
+ * methods.
+ *
+ * @author Put your name here
+ *
+ */
+public abstract class NaturalNumberTest {
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * implementation under test and returns the result.
+     *
+     * @return the new number
+     * @ensures constructorTest = 0
+     */
+    protected abstract NaturalNumber constructorTest();
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * implementation under test and returns the result.
+     *
+     * @param i
+     *            {@code int} to initialize from
+     * @return the new number
+     * @requires i >= 0
+     * @ensures constructorTest = i
+     */
+    protected abstract NaturalNumber constructorTest(int i);
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * implementation under test and returns the result.
+     *
+     * @param s
+     *            {@code String} to initialize from
+     * @return the new number
+     * @requires there exists n: NATURAL (s = TO_STRING(n))
+     * @ensures s = TO_STRING(constructorTest)
+     */
+    protected abstract NaturalNumber constructorTest(String s);
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * implementation under test and returns the result.
+     *
+     * @param n
+     *            {@code NaturalNumber} to initialize from
+     * @return the new number
+     * @ensures constructorTest = n
+     */
+    protected abstract NaturalNumber constructorTest(NaturalNumber n);
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * reference implementation and returns the result.
+     *
+     * @return the new number
+     * @ensures constructorRef = 0
+     */
+    protected abstract NaturalNumber constructorRef();
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * reference implementation and returns the result.
+     *
+     * @param i
+     *            {@code int} to initialize from
+     * @return the new number
+     * @requires i >= 0
+     * @ensures constructorRef = i
+     */
+    protected abstract NaturalNumber constructorRef(int i);
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * reference implementation and returns the result.
+     *
+     * @param s
+     *            {@code String} to initialize from
+     * @return the new number
+     * @requires there exists n: NATURAL (s = TO_STRING(n))
+     * @ensures s = TO_STRING(constructorRef)
+     */
+    protected abstract NaturalNumber constructorRef(String s);
+
+    /**
+     * Invokes the appropriate {@code NaturalNumber} constructor for the
+     * reference implementation and returns the result.
+     *
+     * @param n
+     *            {@code NaturalNumber} to initialize from
+     * @return the new number
+     * @ensures constructorRef = n
+     */
+    protected abstract NaturalNumber constructorRef(NaturalNumber n);
+
+    // TODO - add test cases for four constructors, multiplyBy10, divideBy10, isZero
+
+    // test empty constructor (routine)
+    @Test
+    public void emptyConstructorTestRoutine() {
+        // set up variables/call methods under test
+        NaturalNumber number = this.constructorTest();
+        NaturalNumber numberExpected = this.constructorRef();
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    // test integer constructor (routine)
+    @Test
+    public void integerConstructorTestRoutine() {
+        // set up variables/call methods under test
+        NaturalNumber number = this.constructorTest(3);
+        NaturalNumber numberExpected = this.constructorRef(3);
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    // test integer constructor (edge)
+    @Test
+    public void integerConstructorTestEdge() {
+        // set up variables/call methods under test
+        NaturalNumber number = this.constructorTest(0);
+        NaturalNumber numberExpected = this.constructorRef(0);
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    // test string constructor (routine)
+    @Test
+    public void stringConstructorTestRoutine() {
+        // set up variables/call methods under test
+        NaturalNumber number = this.constructorTest("34");
+        NaturalNumber numberExpected = this.constructorRef("34");
+
+        // assert that the values of variables match expectations.
+        assertEquals(numberExpected, number);
+    }
+
+    // test string constructor (edge)
+    @Test
+    public void stringConstructorTestEdge() {
+        // set up variables/call method under test
+        NaturalNumber number = this.constructorTest("0");
+        NaturalNumber numberExpected = this.constructorRef("0");
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    // test NaturalNumber constructor (routine)
+    @Test
+    public void naturalnumeberConstructorTestRoutine() {
+        // set up variables/call method under test
+        NaturalNumber number = this.constructorTest(new NaturalNumber1L(5));
+        NaturalNumber numberExpected = this
+                .constructorRef(new NaturalNumber1L(5));
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    // test NaturalNumber constructor (edge)
+    @Test
+    public void naturalnumberConstructorTestEdge() {
+        // set up variables/call method under test
+        NaturalNumber number = this.constructorTest(new NaturalNumber1L(0));
+        NaturalNumber numberExpected = this
+                .constructorRef(new NaturalNumber1L(0));
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    // test NaturalNumber constructor (difficult: using a NaturalNumber3)
+    @Test
+    public void naturalnumberConstructorTestDifficult() {
+        // set up variables/call method under test
+        NaturalNumber number = this.constructorTest(new NaturalNumber3(0));
+        NaturalNumber numberExpected = this
+                .constructorRef(new NaturalNumber3(0));
+
+        // assert that the values of variables match expectations
+        assertEquals(numberExpected, number);
+    }
+
+    @Test
+    // Multiplyby10 routine test
+    public void testMultiplyBy10Routine() {
+        // set up variables
+        int x = 2;
+        NaturalNumber n = this.constructorTest(x);
+        NaturalNumber expectedResult = this.constructorRef(x);
+
+        // method call under test
+        n.multiplyBy10(5);
+        expectedResult.multiplyBy10(5);
+
+        // assert that values of variables match expectations
+        assertEquals(expectedResult, n);
+    }
+
+    @Test
+    // Multiplyby10 difficult test
+    public void testMultiplyBy10Max() {
+        // set up variables
+        final int x = 123212321;
+        NaturalNumber n = this.constructorTest(x);
+        NaturalNumber expectedResult = this.constructorRef(x);
+
+        // Method call under test
+        n.multiplyBy10(2);
+        expectedResult.multiplyBy10(2);
+
+        // assert matched expectations
+        assertEquals(expectedResult, n);
+    }
+
+    @Test
+    // Multiplyby10 edge test
+    public void testMultiplyBy10Min() {
+        // set up variables
+        int x = 0;
+        NaturalNumber n = this.constructorTest(x);
+        NaturalNumber expectedResult = this.constructorRef(x);
+
+// Method call under test
+        n.multiplyBy10(0);
+        expectedResult.multiplyBy10(0);
+        // assert matched expectations
+        assertEquals(expectedResult, n);
+    }
+
+    @Test
+    // test isZero (edge)
+    public void testisZero() {
+        // set up variables
+        int x = 0;
+        NaturalNumber n = this.constructorTest(x);
+        NaturalNumber nexpected = this.constructorRef(x);
+
+        // call methods under test
+        // assert that the values of variables match expectations
+        assertTrue(n.isZero());
+        assertEquals(nexpected, n);
+    }
+
+    @Test
+    // test isZero (routine) (using String constructor)
+    public void testisZeroString() {
+        // set up variables
+        String x = "1234";
+        NaturalNumber n = this.constructorTest(x);
+        NaturalNumber nexpected = this.constructorRef(x);
+
+        // call method under test
+        // assert that the values of variables match expectations
+        assertFalse(n.isZero());
+        assertEquals(nexpected, n);
+    }
+
+    @Test
+    // test String isZero (difficult)
+    public void testisZeroMax() {
+        // set up variables
+        int x = Integer.MAX_VALUE;
+        NaturalNumber n = this.constructorTest(x);
+        NaturalNumber nexpected = this.constructorRef(x);
+
+        // call method under test
+        /// assert that values of variables match expectations
+        assertEquals(nexpected, n);
+        assertFalse(n.isZero());
+    }
+
+    @Test
+    // divideBy10 routine test
+    public void testDivideby10Rotinue() {
+        // set up variables
+        final int input = 1234;
+        final int expected = 123;
+        final int expectedRemainder = 4;
+        NaturalNumber n = this.constructorTest(input);
+        NaturalNumber expectedResult = this.constructorRef(expected);
+
+        // call method under test
+        int remainder = n.divideBy10();
+
+        // assert that values of variables match expectations
+        assertEquals(expectedResult, n);
+        assertEquals(expectedRemainder, remainder);
+    }
+
+    @Test
+    // divideBy10 edge test
+    public void testDivideby10EdgeCase() {
+        // set up variables
+        int input = 1;
+        int expected = 0;
+        int expectedRemainder = 1;
+        NaturalNumber n = this.constructorTest(input);
+        NaturalNumber expectedResult = this.constructorRef(expected);
+
+        // call method under test
+        int remainder = n.divideBy10();
+
+        // assert that the values of variables match expectations
+        assertEquals(expectedResult, n);
+        assertEquals(expectedRemainder, remainder);
+    }
+
+    @Test
+    //divideBy10 difficult  test
+    public void testDivideby10DifficultCase() {
+        // set up variables
+        final int input = 123456789;
+        final int expected = 12345678;
+        final int expectedRemainder = 9;
+        NaturalNumber n = this.constructorTest(input);
+        NaturalNumber expectedResult = this.constructorRef(expected);
+
+        // call method under test
+        int remainder = n.divideBy10();
+
+        // assert that the values of variables match expectations
+        assertEquals(expectedResult, n);
+        assertEquals(expectedRemainder, remainder);
+    }
+
+}
