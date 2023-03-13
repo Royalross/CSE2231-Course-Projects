@@ -8,6 +8,7 @@ The problem is to complete and carefully test implementations of the constructor
 
 
 Setup
+
 Only one member of the team should follow the steps to set up an Eclipse project for this assignment. The project should then be shared with the rest of the team by using the Subversion version control system as learned in the Version Control With Subversion lab.
 
 To get started, import the project for this assignment, SortingMachineWithHeapsort, from the SortingMachineWithHeapsort.zip file available at this link. If you don't remember how to do this, see these Setup instructions from an earlier project.
