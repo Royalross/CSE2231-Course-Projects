@@ -1,0 +1,321 @@
+import static org.junit.Assert.assertEquals;
+
+import java.util.Comparator;
+
+import org.junit.Test;
+
+import components.sortingmachine.SortingMachine;
+
+/**
+ * JUnit test fixture for {@code SortingMachine<String>}'s constructor and
+ * kernel methods.
+ *
+ * @author Put your name here
+ *
+ */
+public abstract class SortingMachineTest {
+
+    /**
+     * Invokes the appropriate {@code SortingMachine} constructor for the
+     * implementation under test and returns the result.
+     *
+     * @param order
+     *            the {@code Comparator} defining the order for {@code String}
+     * @return the new {@code SortingMachine}
+     * @requires IS_TOTAL_PREORDER([relation computed by order.compare method])
+     * @ensures constructorTest = (true, order, {})
+     */
+    protected abstract SortingMachine<String> constructorTest(
+            Comparator<String> order);
+
+    /**
+     * Invokes the appropriate {@code SortingMachine} constructor for the
+     * reference implementation and returns the result.
+     *
+     * @param order
+     *            the {@code Comparator} defining the order for {@code String}
+     * @return the new {@code SortingMachine}
+     * @requires IS_TOTAL_PREORDER([relation computed by order.compare method])
+     * @ensures constructorRef = (true, order, {})
+     */
+    protected abstract SortingMachine<String> constructorRef(
+            Comparator<String> order);
+
+    /**
+     *
+     * Creates and returns a {@code SortingMachine<String>} of the
+     * implementation under test type with the given entries and mode.
+     *
+     * @param order
+     *            the {@code Comparator} defining the order for {@code String}
+     * @param insertionMode
+     *            flag indicating the machine mode
+     * @param args
+     *            the entries for the {@code SortingMachine}
+     * @return the constructed {@code SortingMachine}
+     * @requires IS_TOTAL_PREORDER([relation computed by order.compare method])
+     * @ensures <pre>
+     * createFromArgsTest = (insertionMode, order, [multiset of entries in args])
+     * </pre>
+     */
+    private SortingMachine<String> createFromArgsTest(Comparator<String> order,
+            boolean insertionMode, String... args) {
+        SortingMachine<String> sm = this.constructorTest(order);
+        for (int i = 0; i < args.length; i++) {
+            sm.add(args[i]);
+        }
+        if (!insertionMode) {
+            sm.changeToExtractionMode();
+        }
+        return sm;
+    }
+
+    /**
+     *
+     * Creates and returns a {@code SortingMachine<String>} of the reference
+     * implementation type with the given entries and mode.
+     *
+     * @param order
+     *            the {@code Comparator} defining the order for {@code String}
+     * @param insertionMode
+     *            flag indicating the machine mode
+     * @param args
+     *            the entries for the {@code SortingMachine}
+     * @return the constructed {@code SortingMachine}
+     * @requires IS_TOTAL_PREORDER([relation computed by order.compare method])
+     * @ensures <pre>
+     * createFromArgsRef = (insertionMode, order, [multiset of entries in args])
+     * </pre>
+     */
+    private SortingMachine<String> createFromArgsRef(Comparator<String> order,
+            boolean insertionMode, String... args) {
+        SortingMachine<String> sm = this.constructorRef(order);
+        for (int i = 0; i < args.length; i++) {
+            sm.add(args[i]);
+        }
+        if (!insertionMode) {
+            sm.changeToExtractionMode();
+        }
+        return sm;
+    }
+
+    /**
+     * Comparator<String> implementation to be used in all test cases. Compare
+     * {@code String}s in lexicographic order.
+     */
+    private static class StringLT implements Comparator<String> {
+
+        @Override
+        public int compare(String s1, String s2) {
+            return s1.compareToIgnoreCase(s2);
+        }
+
+    }
+
+    /**
+     * Comparator instance to be used in all test cases.
+     */
+    private static final StringLT ORDER = new StringLT();
+
+    /*
+     * Sample test cases.
+     */
+
+    @Test
+    public final void testConstructor() {
+        SortingMachine<String> m = this.constructorTest(ORDER);
+        SortingMachine<String> mExpected = this.constructorRef(ORDER);
+        assertEquals(mExpected, m);
+    }
+
+    @Test
+    public final void testAddEmpty() {
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "green");
+        m.add("green");
+        assertEquals(mExpected, m);
+    }
+
+    // TODO - add test cases for add, changeToExtractionMode, removeFirst,
+    // isInInsertionMode, order, and size
+
+    @Test
+    public final void testAddNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "Apple",
+                "Banana", "Orange");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, true,
+                "Apple", "Banana", "green", "Orange");
+
+        // call method under test
+        m.add("green");
+
+        // assert that the values of variables match expectations
+        assertEquals(mExpected, m);
+    }
+
+    @Test
+    public final void testChangeToExtractionModeEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false);
+
+        //call method under test
+        m.changeToExtractionMode();
+
+        // assert that the values of variables match expectations
+        assertEquals(mExpected, m);
+    }
+
+    @Test
+    public final void testChangeToExtractionModeNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "apple",
+                "banana");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false,
+                "apple", "banana");
+
+        //call method under test
+        m.changeToExtractionMode();
+
+        // assert that the values of variables match expectations
+        assertEquals(mExpected, m);
+    }
+
+    @Test
+    public final void testRemoveFirstNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false,
+                "apple", "banana");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false,
+                "banana");
+        String removedExpected = "apple";
+
+        //call method under test
+        String removed = m.removeFirst();
+
+        // assert that the values of variables match expectations
+        assertEquals(removedExpected, removed);
+        assertEquals(mExpected, m);
+    }
+
+    @Test
+    public final void testRemoveFirstSizeEqualsOne() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false,
+                "apple");
+        SortingMachine<String> mExpected = this.createFromArgsRef(ORDER, false);
+        String removedExpected = "apple";
+
+        //call method under test
+        String removed = m.removeFirst();
+
+        // assert that the values of variables match expectations
+        assertEquals(removedExpected, removed);
+        assertEquals(mExpected, m);
+    }
+
+    @Test
+    public final void testisInInsertionModeTrueEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+
+        // assert that the values of variables match expectations
+        assertEquals(true, m.isInInsertionMode());
+
+    }
+
+    @Test
+    public final void testisInInsertionModeTrueNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "apple",
+                "pineapple");
+
+        // assert that the values of variables match expectations
+        assertEquals(true, m.isInInsertionMode());
+    }
+
+    @Test
+    public final void testisInInsertionModeFalseNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false,
+                "apple", "banana", "orange");
+
+        // assert that the values of variables match expectations
+        assertEquals(false, m.isInInsertionMode());
+    }
+
+    @Test
+    public final void testisInInsertionModeFalseEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false);
+
+        // assert that the values of variables match expectations
+        assertEquals(false, m.isInInsertionMode());
+    }
+
+    @Test
+    public final void testSizeInsertionModeEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+
+        // call method under test
+        int size = m.size();
+
+        // assert that the values of variables match expectations
+        assertEquals(0, size);
+    }
+
+    // Simple routine test case
+    @Test
+    public final void testSizeInsertionModeNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true, "apple",
+                "banana", "pinapple", "strawbarry");
+
+        // call method under test
+        int size = m.size();
+        final int sizeExpected = 4;
+
+        // assert that the values of variables match expectations
+        assertEquals(sizeExpected, size);
+    }
+
+    @Test
+    public final void testSizeNotInsertionModeEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false);
+
+        // call method under test
+        int size = m.size();
+
+        // assert that the values of variables match expectations
+        assertEquals(0, size);
+    }
+
+    @Test
+    public final void testSizeNotInsertionModeNonEmpty() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, false,
+                "apple", "banana", "pinapple", "strawbarry");
+
+        // call method under test
+        int size = m.size();
+        final int sizeExpected = 4;
+
+        // assert that the values of variables match expectations
+        assertEquals(sizeExpected, size);
+    }
+
+    @Test
+    public final void testOrder() {
+        // set up variables
+        SortingMachine<String> m = this.createFromArgsTest(ORDER, true);
+
+        // call method under test
+        // assert that the values of variables match expectations
+        assertEquals(ORDER, m.order());
+
+    }
+}
